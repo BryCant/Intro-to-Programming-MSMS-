@@ -5,25 +5,49 @@
 
 import cipherMethods as Ciphers
 
-enOrDe = input("Would you like to Encode or Decode a text file? (E or D) ")
-fileName = input("What is the name of this file? (include '.txt') ")
-shiftNum = int(input("What is the caesar shift magnitude? "))
+fileName = input("What is the name of the message file? (include '.txt') ")
+outputName = input("Name your output file: (include '.txt') ")
+cipherChoice = input("Atbash, Caesar, or Qwerty cipher? (A, C, or Q) ")
 
-if enOrDe.lower() == 'e':
-    #   Encoding message file
-    outputFile = open("outputHere.txt", 'w')
+# Atbashing message file
+if cipherChoice.lower() == 'a':
+    outputFile = open(outputName, 'w') if fileName != outputName else open('-' + outputName, 'w')
     with open(fileName) as messageFile:
-        Ciphers.encode_message(messageFile, outputFile, Ciphers.caesar_cipher(shiftNum))
-    print(outputFile.read())
-elif enOrDe.lower() == 'd':
-    #   Decoding message file
-    messageFile = open("outputHere.txt", 'r')
-    print(messageFile.read())
-    with open(fileName) as workingFile:
-        Ciphers.decode_message(workingFile, messageFile, Ciphers.caesar_cipher(shiftNum * -1))
+        Ciphers.atbash_cipher(messageFile, outputFile)
+# Qwerty message file
+elif cipherChoice.lower() == 'q':
+    enOrDe = input("Would you like to Encode or Decode a text file? (E or D) ")
+    if not(enOrDe.lower() == 'e' or enOrDe.lower() == 'd'):
+        print('Invalid input!')
+        exit()
+    outputFile = open(outputName, 'w') if fileName != outputName else open('-' + outputName, 'w')
+    with open(fileName) as messageFile:
+        Ciphers.qwerty_cipher(messageFile, outputFile, enOrDe)
+# Caesar message file
+elif cipherChoice.lower() == 'c':
+    enOrDe = input("Would you like to Encode or Decode a text file? (E or D) ")
+    shiftNum = input("What is the caesar shift magnitude? ")
+    # Encoding caesar message file
+    if enOrDe.lower() == 'e':
+        outputFile = open(outputName, 'w')
+        with open(fileName) as messageFile:
+            Ciphers.encode_message(messageFile, outputFile, Ciphers.caesar_cipher(int(shiftNum)))
+        outputFile.close()
+    # Decoding caesar message file
+    elif enOrDe.lower() == 'd':
+        #   Decoding message file
+        outputFile = open(outputName, 'w')
+        with open(fileName) as messageFile:
+            Ciphers.encode_message(messageFile, outputFile, Ciphers.caesar_cipher(int(shiftNum)*-1))
+        outputFile.close()
+    else:
+        print('Invalid input!')
+        exit()
+# All of the error handling
 else:
     print('Invalid input!')
     exit()
+
 
 
 

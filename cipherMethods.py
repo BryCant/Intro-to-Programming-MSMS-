@@ -5,31 +5,42 @@
 import string
 
 
+def qwerty_cipher(input_file, output_file, enOrDe):
+    output = ''
+    qwerty = "qwertyuiopasdfghjklzxcvbnm"
+    if enOrDe.lower() == 'e':     # encoding
+        qwertyDict = {string.ascii_letters[i]: qwerty[i] for i in range(len(qwerty))}
+    else:   # decoding
+        qwertyDict = {qwerty[i]: string.ascii_letters[i] for i in range(len(qwerty))}
+    for letter in input_file.read().lower():
+        output += qwertyDict[letter] if letter in string.ascii_lowercase else letter
+    output_file.write(output)
+
+
 def caesar_cipher(shift):
+    # dictionary comprehension to create dictionary based on shift. % to eliminate full loops through alphabet
     return {i: string.ascii_lowercase[(i + shift) % 26] for i in range(len(string.ascii_lowercase))}
 
 
 def decode_message(input_file, output_file, decoder):
-    content = input_file.read().lower()
     output = ''
-    for letter in content:
-        output += decoder[string.ascii_letters.index(letter)] if letter in string.ascii_lowercase else " "
-    return output_file.write(output)
+    for letter in input_file.read().lower():
+        # add decoded character one at a time to account for non-alphabetic characters [/n, " ", etc.]
+        output += decoder[string.ascii_letters.index(letter)] if letter in string.ascii_lowercase else letter
+    output_file.write(output)    # returned so the value can be passed into write function
 
 
+# could have used a single function but you require both :)))
 def encode_message(input_file, output_file, encoder):
-    content = input_file.read().lower()
     output = ''
-    for letter in content:
-        output += encoder[string.ascii_letters.index(letter)] if letter in string.ascii_lowercase else " "
-    return output_file.write(output)
+    for letter in input_file.read().lower():
+        output += encoder[string.ascii_letters.index(letter)] if letter in string.ascii_lowercase else letter
+    output_file.write(output)
 
 
-if __name__ == "__main__":
-    outputFile = open("outputHere.txt", 'w')
-    with open("encoded_text.txt") as workingFile:
-        encode_message(workingFile, outputFile, caesar_cipher(5))
-        outputFile = open("outputHere.txt", 'r')
-        print(outputFile.read())
-else:
-    print("coolcool")
+def atbash_cipher(input_file, output_file):
+    output = ''
+    cipher_dict = {string.ascii_lowercase[i]: string.ascii_lowercase[25-i] for i in range(len(string.ascii_lowercase))}
+    for letter in input_file.read().lower():
+        output += cipher_dict[letter] if letter in string.ascii_lowercase else letter
+    output_file.write(output)
