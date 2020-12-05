@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class WilkesWindow:
+class WilksPerkins:
     def __init__(self):
         self.window = tk.Tk()  # create window containing errthang
         self.window.title("perkinsBryant_Homework4")  # title of window
@@ -11,7 +11,7 @@ class WilkesWindow:
         self.bench_entry = tk.StringVar()  # var will store bench max text box contents
         self.squat_entry = tk.StringVar()  # var will store squat max text box contents
         self.deadlift_entry = tk.StringVar()  # var will store deadlift max text box contents
-        self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Coefficient Calculator", relief=tk.RIDGE, padding=6)
+        self.main_frame = ttk.LabelFrame(self.window, text="Wilks Coefficient Calculator", relief=tk.RIDGE, padding=6)
         self.results = ttk.Label(self.window, text="Your Wilks Score:")  # label that will show results
         self.results.grid(row=2, column=1, sticky=tk.W + tk.N)  # place results underneath everything beside quit button
         self.radio_val = tk.IntVar()  # radiobutton value stored as either male(0) or female(1)
@@ -95,5 +95,5 @@ class WilkesWindow:
 
 
 # Create the entire GUI program and start the GUI event loop
-program = WilkesWindow()
+program = WilksPerkins()
 program.window.mainloop()
