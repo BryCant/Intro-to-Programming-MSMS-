@@ -12,7 +12,7 @@ class WilkesWindow:
         self.squat_entry = tk.StringVar()
         self.deadlift_entry = tk.StringVar()
         self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Coefficient Calculator", relief=tk.RIDGE, padding=6)
-        self.weight_final = ttk.Label(self.window, text="Weight")
+        self.weight_final = ttk.Label(self.window, text="Your Wilks Score:")
         self.weight_final.grid(row=2, column=1, sticky=tk.W + tk.N)
         self.radio_val = tk.IntVar()
         self.create_widgets()
@@ -23,7 +23,7 @@ class WilkesWindow:
         # Create some room around all the internal frames
         self.window['padx'], self.window['pady'] = 4, 4
 
-        self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Coefficient Calculator", relief=tk.RIDGE, padding=6)
+        self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Calculator", relief=tk.RIDGE, padding=6)
         self.main_frame.grid(row=1, column=1, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
 
         # The Choices
@@ -76,15 +76,19 @@ class WilkesWindow:
         quit_button.grid(row=2, column=1, sticky=tk.E)
 
     def on_calc(self):
-        bw = int(self.weight_entry.get()) / 2.205
-        if self.radio_val.get() == 0:
-            denominator = self.m_a + self.m_b*bw + self.m_c*bw**2 + self.m_d*bw**3 + self.m_e*bw**4 + self.m_f*bw**5
-        else:
-            denominator = self.f_a + self.f_b*bw + self.f_c*bw**2 + self.f_d*bw**3 + self.f_e*bw**4 + self.f_f*bw**5
+        try:
+            bw = int(self.weight_entry.get()) / 2.205
+            total_lift = (int(self.bench_entry.get()) + int(self.squat_entry.get()) + int(self.deadlift_entry.get())) / 2.205
 
-        total_lift = (int(self.bench_entry.get()) + int(self.squat_entry.get()) + int(self.deadlift_entry.get())) / 2.205
-        self.score = total_lift * (500/denominator)
-        self.weight_final['text'] = "Your Wilkes Score is " + str(self.score)
+            if self.radio_val.get() == 0:
+                denominator = self.m_a + self.m_b * bw + self.m_c * bw ** 2 + self.m_d * bw ** 3 + self.m_e * bw ** 4 + self.m_f * bw ** 5
+            else:
+                denominator = self.f_a + self.f_b * bw + self.f_c * bw ** 2 + self.f_d * bw ** 3 + self.f_e * bw ** 4 + self.f_f * bw ** 5
+
+            self.score = total_lift * (500 / denominator)
+            self.weight_final['text'] = "Your Wilkes Score:" + str(self.score)
+        except:
+            self.weight_final['text'] = "Please enter integers into the text boxes above"
 
 
 # Create the entire GUI program and start the GUI event loop
