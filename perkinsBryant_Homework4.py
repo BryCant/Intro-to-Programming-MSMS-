@@ -8,7 +8,6 @@ class WilkesWindow:
         self.window = tk.Tk()
         self.window.title("perkinsBryant_Homework4")
         self.score = "Your Wilkes Score is "
-        self.radio_variable = tk.StringVar()
         self.weight_entry = tk.StringVar()
         self.bench_entry = tk.StringVar()
         self.squat_entry = tk.StringVar()
@@ -16,37 +15,26 @@ class WilkesWindow:
         self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Coefficient Calculator", relief=tk.RIDGE, padding=6)
         self.weight_final = ttk.Label(self.window, text="Weight")
         self.weight_final.grid(row=2, column=1, sticky=tk.W + tk.N)
+        self.radio_val = tk.IntVar()
         self.create_widgets()
-        self.m_a = -216.0475144
-        self.m_b = 16.2606339
-        self.m_c = -0.002388645
-        self.m_d = -0.00113732
-        self.m_e = 7.01863E-06
-        self.m_f = -1.291E-08
-        self.f_a = 594.31747775582
-        self.f_b = -27.23842536447
-        self.f_c = 0.82112226871
-        self.f_d = -0.00930733913
-        self.f_e = 4.731582E-05
-        self.f_f = -9.054E-08
+        self.m_a, self.m_b, self.m_c, self.m_d, self.m_e, self.m_f = -216.047514, 16.260634,  -0.002388645, -0.0011373, 7.0186E-06, -1.29E-08
+        self.f_a, self.f_b, self.f_c, self.f_d, self.f_e, self.f_f = 594.3175, -27.238, 0.8212, -0.00931, 4.732E-05, -9.054E-08
 
     def create_widgets(self):
         # Create some room around all the internal frames
-        self.window['padx'] = 4
-        self.window['pady'] = 4
+        self.window['padx'], self.window['pady'] = 4, 4
 
         self.main_frame = ttk.LabelFrame(self.window, text="Wilkes Coefficient Calculator", relief=tk.RIDGE, padding=6)
         self.main_frame.grid(row=1, column=1, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
 
         # The Choices
-        self.radio_variable = tk.StringVar()
-        self.radio_variable.set("0")
+        self.radio_val.set(0)
 
         sex_label = ttk.Label(self.main_frame, width=17, text="Choose your sex")
         sex_label.grid(row=1, column=1, sticky=tk.W + tk.N)
 
-        male_button = ttk.Radiobutton(self.main_frame, text="Male", variable=self.radio_variable, value="0")
-        female_button = ttk.Radiobutton(self.main_frame, text="Female", variable=self.radio_variable, value="1")
+        male_button = ttk.Radiobutton(self.main_frame, text="Male", variable=self.radio_val, value=0)
+        female_button = ttk.Radiobutton(self.main_frame, text="Female", variable=self.radio_val, value=1)
 
         male_button.grid(row=1, column=2, sticky=tk.W)
         female_button.grid(row=1, column=2, sticky=tk.E)
@@ -89,8 +77,15 @@ class WilkesWindow:
         quit_button.grid(row=2, column=1, sticky=tk.E)
 
     def on_calc(self):
-        self.score = self.weight_entry.get() + self.bench_entry.get() + self.squat_entry.get() + self.deadlift_entry.get()
-        self.weight_final['text'] = "Your Wilkes Score is " + self.score
+        bw = int(self.weight_entry.get())
+        if self.radio_val.get() == 0:
+            denominator = self.m_a + self.m_b*bw + self.m_c*bw**2 + self.m_d*bw**3 + self.m_e*bw**4 + self.m_f*bw**5
+        else:
+            denominator = self.f_a + self.f_b*bw + self.f_c*bw**2 + self.f_d*bw**3 + self.f_e*bw**4 + self.f_f*bw**5
+
+        total_lift = int(self.bench_entry.get()) + int(self.squat_entry.get()) + int(self.deadlift_entry.get())
+        self.score = total_lift * (500/denominator)
+        self.weight_final['text'] = "Your Wilkes Score is " + str(self.score)
         print(self.score)
 
 
