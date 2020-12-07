@@ -16,11 +16,6 @@ class WilksPerkins:
         self.results.grid(row=2, column=1, sticky=tk.W + tk.N)  # place results underneath everything beside quit button
         self.radio_val = tk.IntVar()  # radiobutton value stored as either male(0) or female(1)
         self.create_widgets()  # render each widget instantiated
-        # all the constants - male and female
-        self.m_a, self.m_b, self.m_c = -216.047514, 16.2606339, -0.002388645
-        self.m_d, self.m_e, self.m_f = -0.00113732, 7.01863E-06, -1.291E-08
-        self.f_a, self.f_b, self.f_c = 594.31747775582, -27.23842536447, 0.82112226871
-        self.f_d, self.f_e, self.f_f = -0.00930733913, 4.731582E-05, -9.054E-08
 
     def create_widgets(self):
         # Create some room around all the internal frames
@@ -84,10 +79,12 @@ class WilksPerkins:
             total_lift = (int(self.bench_entry.get()) + int(self.squat_entry.get()) + int(self.deadlift_entry.get())) / 2.20462262185
 
             if self.radio_val.get() == 0:  # if male(0) use male constants
-                denominator = self.m_a + self.m_b * bw + self.m_c * bw ** 2 + self.m_d * bw ** 3 + self.m_e * bw ** 4 + self.m_f * bw ** 5
-            else:  # else(1) use female constant
-                denominator = self.f_a + self.f_b * bw + self.f_c * bw ** 2 + self.f_d * bw ** 3 + self.f_e * bw ** 4 + self.f_f * bw ** 5
+                # all the constants
+                a, b, c, d, e, f = -216.047514, 16.2606339, -0.002388645, -0.00113732, 7.01863E-06, -1.291E-08
+            else:  # else(1) use female constants
+                a, b, c, d, e, f = 594.31747775582, -27.23842536447, 0.82112226871, -0.00930733913, 4.731582E-05, -9.054E-08
 
+            denominator = a + b * bw + c * bw ** 2 + d * bw ** 3 + e * bw ** 4 + f * bw ** 5
             self.score = total_lift * (500 / denominator)
             self.results['text'] = f"Your Wilks Score: {str(self.score)} \n[Wilks Coefficient: {500/denominator}]"
         except:
