@@ -70,7 +70,10 @@ class WilksPerkins:
 
         # Quit button in the lower right corner
         quit_button = ttk.Button(self.window, text="Quit", command=self.window.destroy)  # calls built-in destroy()
-        quit_button.grid(row=2, column=1, sticky=tk.E)
+        quit_button.grid(row=3, column=1)  # Quit button in the lower right corner
+
+        save_button = ttk.Button(self.window, text="Save", command=self.save_stats)  # calls save function
+        save_button.grid(row=3, column=1, sticky=tk.E)
 
     def on_calc(self):
         # try/except just in case all text boxed don't have integer values
@@ -90,7 +93,12 @@ class WilksPerkins:
         except:
             self.results['text'] = "Please enter integers into ALL text boxes above"
 
+    def save_stats(self):
+        outputFile = open(outputName, 'w')
+        print("Hello")
 
+# add features to save your results to a file.
+# add a window that plots your results over time
 # Create the entire GUI program and start the GUI event loop
 program = WilksPerkins()
 program.window.mainloop()
